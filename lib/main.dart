@@ -51,7 +51,9 @@ class MyHomePage extends HookConsumerWidget {
 
 
     return Scaffold(
+
         appBar: AppBar(
+            surfaceTintColor: Colors.transparent,
           leading: const Icon(Icons.arrow_back_outlined),
           title: const Text("講師清單"),
         ),
