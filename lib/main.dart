@@ -48,7 +48,7 @@ class MyHomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lessonIsExpanded = useState(false); //check if user expands the lesson list from lecturer
+
 
     return Scaffold(
         appBar: AppBar(
@@ -62,37 +62,8 @@ class MyHomePage extends HookConsumerWidget {
                 itemCount: lecturerList.length,
                 itemBuilder: (context, index) {
                   final lecturer = lecturerList[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: ExpansionTile(
-                      trailing: lessonIsExpanded.value ? const Icon(Icons.remove) : const Icon(Icons.add),
-                      shape: const Border(),
-                      title: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: AssetImage(lecturer.profilePicture),
-                        ),
-                        title: Text(
-                          lecturer.jobTitle,
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        subtitle: Text(
-                          lecturer.name,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      children: [
-                        const Divider(
-                          color: Colors.grey,
-                          thickness: 1.0,
-                          height: 1.0,
-                        ),
-                        ...lecturer.lessonList.map((e) => LessonListTile(lesson: e))
-                      ],
-                      onExpansionChanged: (expanded) {
-                        lessonIsExpanded.value = expanded;
-                      },
-                    ),
+                  return LecturerExpansionTile(
+                    lecturer: lecturer,
                   );
                 });
           }, error: (e, s) {
@@ -101,6 +72,49 @@ class MyHomePage extends HookConsumerWidget {
             return const Center(child: CircularProgressIndicator());
           }),
         ));
+  }
+}
+
+class LecturerExpansionTile extends HookConsumerWidget {
+  const LecturerExpansionTile({required this.lecturer, super.key});
+
+  final Lecturer lecturer;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lessonIsExpanded = useState(false); //check if user expands the lesson list from lecturer
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+      child: ExpansionTile(
+        trailing: lessonIsExpanded.value ? const Icon(Icons.remove) : const Icon(Icons.add),
+        shape: const Border(),
+        title: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: AssetImage(lecturer.profilePicture),
+          ),
+          title: Text(
+            lecturer.jobTitle,
+            style: const TextStyle(color: Colors.grey),
+          ),
+          subtitle: Text(
+            lecturer.name,
+            style: const TextStyle(fontSize: 18),
+          ),
+        ),
+        children: [
+          const Divider(
+            color: Colors.grey,
+            thickness: 1.0,
+            height: 1.0,
+          ),
+          ...lecturer.lessonList.map((e) => LessonListTile(lesson: e))
+        ],
+        onExpansionChanged: (expanded) {
+          lessonIsExpanded.value = expanded;
+        },
+      ),
+    );
   }
 }
 
